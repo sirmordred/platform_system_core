@@ -293,6 +293,12 @@ static int parse_flags(char *flags, struct flag_list *fl,
                         } else {
                             flag_vals->partnum = strtol(part_start, NULL, 0);
                         }
+			//Force adoptable sdcard even if fstab says otherwise
+			//Kirin 960 uses "sdcard", qcom uses "sdcard1"
+			if(strstr(flag_vals->label, "sdcard")) {
+				flag_vals->key_loc = strdup("footer");
+				f |= MF_CRYPT;
+			}
                     } else {
                         LERROR << "Warning: voldmanaged= flag malformed";
                     }
